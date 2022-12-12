@@ -30,10 +30,9 @@ def read_list_from_file(list_file):
         lines  = f.readlines()
     return lines
 
-curr_dir = os.getcwd()
-test_df = pd.read_csv(curr_dir + "/input/deepDDG_data/novoesp-deepddg-server-predictions-sub-only/test.more.csv")
-ddg = read_list_from_file(curr_dir + "/input/deepDDG_data/novoesp-deepddg-server-predictions-sub-only/wildtype_structure_prediction_af2.deepddg.ddg.txt")
 
+test_df = pd.read_csv("input/ddg_data/novoesp-deepddg-server-predictions-sub-only/test.more.csv")
+ddg = read_list_from_file("input/ddg_data/novoesp-deepddg-server-predictions-sub-only/wildtype_structure_prediction_af2.deepddg.ddg.txt")
 
 header = ddg[0]
 data = [s.split() for s in ddg[1:]]
@@ -57,4 +56,8 @@ if 1:
         'tm': test_df.ddG.values,
     })
     submit_df.tm = submit_df.tm.fillna(0)
-    submit_df.to_csv(curr_dir + '/output/deepddg_submit.csv', index=False) #lb0.335
+    submit_df.to_csv('output/deepddg2_submission.csv', index=False) #lb0.335
+
+
+
+print('done')
