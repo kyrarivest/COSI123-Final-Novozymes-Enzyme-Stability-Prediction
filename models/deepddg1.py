@@ -232,7 +232,7 @@ print("\n\n\n... BASIC DATA SETUP FINISHED ...\n\n")
 
 #PRE-REQ DATA FILES
 # 1.1 – Define the path to the model output text file (I'm using mine but you can use the original)
-DEEPDDG_PRED_TXT_PATH = "/Users/kyrarivest/Desktop/cosi123/final/input/deepDDG_data/novoesp-deepddg-server-predictions-sub-only/wildtype_structure_prediction_af2.deepddg.ddg.txt"
+DEEPDDG_PRED_TXT_PATH = "input/ddg_data/novoesp-deepddg-server-predictions-sub-only/wildtype_structure_prediction_af2.deepddg.ddg.txt"
 
 # 1.2 – Read the txt file into a pandas dataframe specifying a space as the delimiter
 #       --> This introduces some weirdness with the number of columns... so we have to drop some and rename them
@@ -423,7 +423,7 @@ print(test_df.describe().T)
 print(test_df)
 print(test_df.info())
 print("########################")
-test_df.to_csv(curr_dir + "/output/ddgout.csv")
+test_df.to_csv("input/ddg_data/ddgout.csv")
 
 
 # 9.1 – Check that no NaN values slipped through
@@ -435,7 +435,7 @@ seqid_2_tmrank_mapping = test_df.groupby("seq_id")["norm_combined_val"].first().
 ss_df["tm"] = ss_df["seq_id"].apply(lambda x: seqid_2_tmrank_mapping[x])
 
 # 9.3 – Save properly for submission
-ss_df.to_csv(curr_dir + '/output/deepddg_submit_complicated.csv', index=False)
+ss_df.to_csv('output/deepddg1_submission.csv', index=False)
 
 # 9.4 – Display the sample submission dataframe and it's details
 print(ss_df.describe().T)
