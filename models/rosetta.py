@@ -10,17 +10,16 @@ from scipy.stats import rankdata
 
 curr_dir = os.getcwd()
 
-relaxed_path = curr_dir + '/rosetta_data/wildtypeA'
+relaxed_path = 'input/rosetta_data/wildtypeA'
 files = os.listdir(relaxed_path)
 relaxed_pdbs = [file for file in files if file.endswith(".pdb")]
 mutation_to_pdb = {}
 mutation_to_pdb['mutation'] = [file.split('_')[1] for file in relaxed_pdbs]
 mutation_to_pdb['path'] = [file for file in relaxed_pdbs]
 mutation_to_pdb_df = pd.DataFrame(mutation_to_pdb)
-print(mutation_to_pdb_df.head())
 
 
-
+"""
 #pyrosettacolabsetup.install_pyrosetta(cache_wheel_on_google_drive=False)
 import pyrosetta
 pyrosetta.init()
@@ -41,6 +40,9 @@ print(scores.head())
 
 scores.to_csv('rosetta_scores.csv', index=False)
 print('done')
+"""
+
+scores = pd.read_csv('input/rosetta_data/rosetta_scores.csv')
 
 def find_mut(row):
     mut = row.mutant_seq
@@ -63,7 +65,7 @@ def find_mut(row):
     row['mutation_key'] = row['WT']+str(row['position']) + row['MUT']
     return row
 
-novo_test = pd.read_csv(curr_dir + "/input/novozymes-enzyme-stability-prediction/test.csv")
+novo_test = pd.read_csv("input/novozymes-enzyme-stability-prediction/test.csv")
 novo_test = novo_test.rename({'protein_sequence': 'mutant_seq', 'seq_id': 'source_df_id'}, axis = 1)
 novo_test['sequence'] = 'VPVNPEPDATSVENVALKTGSGDSQSDPIKADLEVKGQSALPFDVDCWAILCKGAPNVLQRVNEKTKNSNRDRSGANKGPFKDPQKWGIKALPPKNPSWSAQDFKSPEEYAFASSLQGGTNAILAPVNLASQNSQGGVLNGFYSANKVAQFDPSKPQQTKGTWFQITKFTGAAGPYCKALGSNDKSVCDKNKNIAGDWGFDPAKWAYQYDEKNNKFNYVGK'
 novo_test = novo_test.apply(find_mut,axis=1)
