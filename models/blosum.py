@@ -78,7 +78,7 @@ curr_dir = os.getcwd()
 wt = 'VPVNPEPDATSVENVALKTGSGDSQSDPIKADLEVKGQSALPFDVDCWAILCKGAPNVLQRVNEKTKNSNRDRSGANKGPFKDPQKWGIKALPPKNPSWSAQDFKSPEEYAFASSLQGGTNAILAPVNLASQNSQGGVLNGFYSANKVAQFDPSKPQQTKGTWFQITKFTGAAGPYCKALGSNDKSVCDKNKNIAGDWGFDPAKWAYQYDEKNNKFNYVGK'
 
 # Read testing set sequences and pH:
-test_df = pd.read_csv(curr_dir + "/input/novozymes-enzyme-stability-prediction/test.csv")
+test_df = pd.read_csv("../input/novozymes-enzyme-stability-prediction/test.csv")
 
 
 # Add mutation information to testing set:
@@ -103,6 +103,8 @@ for _, row in test_df.iterrows():
 
 test_df = pd.concat([test_df, pd.DataFrame(data=result, columns=['type', 'resid', 'wt', 'mut'])], axis=1)
 
+
+
 ###########BLOSUM#############
 def blosum_apply(row):
     if row['type'] == 'SUB':
@@ -114,7 +116,7 @@ def blosum_apply(row):
     else:
         assert False, "Ups"
 
-blosum = pd.read_csv(curr_dir + '/input/blosum_data/BLOSUM100.txt', sep='\s+', comment='#')
+blosum = pd.read_csv("../input/blosum_data/BLOSUM100.txt", sep='\s+', comment='#')
 test_df['blosum'] = test_df.apply(blosum_apply, axis=1)
 test_df['blosum_rank'] = rankdata(test_df['blosum'])
 
@@ -125,6 +127,6 @@ print(test_df.info())
 #Create submission file
 blosum_submission = test_df[['seq_id', 'blosum_rank']]
 blosum_submission.rename(columns={'blosum_rank':'tm'},inplace = True)
-blosum_submission.to_csv(curr_dir + '/output/blosum_submission.csv', index=False)
+blosum_submission.to_csv('../output/blosum_submission.csv', index=False)
 
 print('done')
