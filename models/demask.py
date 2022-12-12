@@ -5,80 +5,15 @@ from scipy.stats import rankdata
 import numpy as np
 import pyrosettacolabsetup
 import builtins
+import Levenshtein
 from biopandas.pdb import PandasPdb
 import demask
-
-two_colors = sns.xkcd_palette(['red', 'bright blue'])
-
-
-# Plot rank distributions
-def plot_rank_dist(name, ax, show_del=False):
-
-    sns.kdeplot(
-        data=test_df.query('type=="SUB"'),
-        x='{}_rank'.format(name),
-        bw_adjust=0.3,
-        lw=3,
-        label='SUB',
-        ax=ax,
-        color='k'
-    )
-
-    ax.vlines(
-        test_df.query('type=="DEL"')['{}_rank'.format(name)],
-        ax.get_ylim()[0],
-        ax.get_ylim()[1],
-        lw=5,
-        label='DEL',
-        color=two_colors[0]
-    )
-
-    ax.vlines(
-        test_df.query('type=="WT"')['{}_rank'.format(name)],
-        ax.get_ylim()[0],
-        ax.get_ylim()[1],
-        lw=5,
-        label='WT',
-        color=two_colors[1]
-    )
-
-    if show_del:
-        sns.kdeplot(
-            data=test_df.query('type=="DEL"'),
-            x='{}_rank'.format(name),
-            bw_adjust=0.3,
-            lw=3,
-            label='DEL',
-            ax=ax,
-            color=two_colors[0]
-        )
-
-        ax.vlines(
-            test_df.query('type=="DEL"')['{}_rank'.format(name)],
-            ax.get_ylim()[0],
-            ax.get_ylim()[1],
-            lw=5,
-            label='DEL',
-            color=two_colors[0]
-        )
-
-    ax.set_xlim(-50,2550)
-    ax.set_title('{} rank distribution'.format(name), fontsize=20)
-    ax.set_xlabel('{}_rank'.format(name), fontsize=20)
-    ax.set_ylabel('Density', fontsize=20)
-
-    ax.tick_params(labelsize=12)
-    ax.legend(loc=1)
-
-    return ax
-
-curr_dir = os.getcwd()
 
 # Wild type sequence provided in the "Dataset Description":
 wt = 'VPVNPEPDATSVENVALKTGSGDSQSDPIKADLEVKGQSALPFDVDCWAILCKGAPNVLQRVNEKTKNSNRDRSGANKGPFKDPQKWGIKALPPKNPSWSAQDFKSPEEYAFASSLQGGTNAILAPVNLASQNSQGGVLNGFYSANKVAQFDPSKPQQTKGTWFQITKFTGAAGPYCKALGSNDKSVCDKNKNIAGDWGFDPAKWAYQYDEKNNKFNYVGK'
 
 # Read testing set sequences and pH:
-test_df = pd.read_csv(curr_dir + "/input/novozymes-enzyme-stability-prediction/test.csv")
+test_df = pd.read_csv("input/novozymes-enzyme-stability-prediction/test.csv")
 
 
 # Add mutation information to testing set:
@@ -127,5 +62,6 @@ testDF.loc[testDF['type']=='DEL','demask'] = testDF['demask'].dropna().min()
 # Compute the rank of each DeMaSk score
 testDF['demask_rank'] = rankdata(testDF['demask'])
 demask_submission['tm'] = testDF['demask_rank']
-demask_submission.to_csv('demask/demask_submission.csv', index=False)
-testDF.to_csv('demask/demask_testDF.csv', index=False)
+demask_submission.to_csv('output/demask_submission.csv', index=False)
+
+print('done')
